@@ -1,0 +1,5 @@
+/Dist-Zilla-Plugin-BundleInspector*
+/.build
+/cover_db/
+/nytprof*
+/tags
