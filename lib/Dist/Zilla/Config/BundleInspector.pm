@@ -44,6 +44,8 @@ sub _build_ini_opts {
   };
 }
 
+# secret knowledge about dist-zilla and pod-weaver bundles
+
 sub __override_dzil_add_bundle {
   my ($self, $bundle, $payload) = @_;
   my $package = $bundle;
@@ -64,6 +66,15 @@ sub __pkg_to_app {
 }
 
 use String::RewritePrefix
+  rewrite => {
+    -as      => '__pod_weaver_rewriter',
+    prefixes => {
+      'Pod::Weaver::PluginBundle::' => '@',
+      'Pod::Weaver::Plugin::'       => '-',
+      'Pod::Weaver::Section::'      => '',
+      ''                            => '=',
+    },
+  },
   rewrite => {
     -as      => '__dist_zilla_rewriter',
     prefixes => {

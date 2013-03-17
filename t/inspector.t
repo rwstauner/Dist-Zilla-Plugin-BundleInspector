@@ -8,29 +8,29 @@ use Test::Differences;
 my $mod = 'Dist::Zilla::Config::BundleInspector';
 eval "require $mod" or die $@;
 
-subtest mvp_bundle_config => sub {
-  my $bundle = 'TestBundles::RoundHere';
+subtest pod_weaver => sub {
+  my $bundle = 'Pod::Weaver::PluginBundle::RoundHere';
   my $bi = new_ok($mod, [
     bundle_class => $bundle,
   ]);
 
-  local *pkg  = sub { $bundle . '::' . $_[0] };
+  local *pkg  = sub { 'Pod::Weaver::' . $_[0] };
   eq_or_diff $bi->plugin_specs, [
-    [Omaha   => pkg('Jones'),         { salutation => 'mr' }],
-    [Perfect => pkg('BlueBuildings'), { ':version' => '0.003' }],
+    [Omaha   => pkg('Plugin::Jones'),         { salutation => 'mr' }],
+    [Perfect => pkg('Section::BlueBuildings'), { ':version' => '0.003' }],
 
   ], 'plugin_specs';
 
   eq_or_diff $bi->prereqs->as_string_hash, {
-    $bundle . '::Jones'         => 0,
-    $bundle . '::BlueBuildings' => '0.003',
+    'Pod::Weaver::Plugin::Jones'          => 0,
+    'Pod::Weaver::Section::BlueBuildings' => '0.003',
   }, 'simplified prereqs with version';
 
   eq_or_diff $bi->ini_string, <<INI, 'ini_string';
-[${bundle}::Jones / Omaha]
+[-Jones / Omaha]
 salutation = mr
 
-[${bundle}::BlueBuildings / Perfect]
+[BlueBuildings / Perfect]
 :version = 0.003
 INI
 };

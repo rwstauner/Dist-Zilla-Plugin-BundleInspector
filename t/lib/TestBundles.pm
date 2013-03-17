@@ -5,14 +5,14 @@ package # no_index
   TestBundles;
 
 package
-  TestBundles::RoundHere;
+  Pod::Weaver::PluginBundle::RoundHere;
 
-sub pkg { __PACKAGE__ . '::' . $_[0] }
+sub pkg { 'Pod::Weaver::' . $_[0] }
 
 sub mvp_bundle_config {
   return (
-    [Omaha   => pkg('Jones'),         { salutation => 'mr' }],
-    [Perfect => pkg('BlueBuildings'), { ':version' => '0.003' }],
+    [Omaha   => pkg('Plugin::Jones'),         { salutation => 'mr' }],
+    [Perfect => pkg('Section::BlueBuildings'), { ':version' => '0.003' }],
   );
 }
 
