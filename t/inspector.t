@@ -39,7 +39,7 @@ subtest bundle_config => sub {
   my $bundle = 'TestBundles::AnnaBegins';
   my $bi = new_ok($mod, [
     bundle_class => $bundle,
-    bundle_method => 'bundle_config',
+    # bundle_method should be determined automatically
   ]);
 
   local *pkg  = sub { $bundle . '::' . $_[0] };
@@ -73,19 +73,7 @@ subtest dzil_bundle => sub {
   my $bundle = 'Dist::Zilla::PluginBundle::SullivanStreet';
   my $bi = new_ok($mod, [
     bundle_class  => $bundle,
-    bundle_method => 'bundle_config',
-    ini_opts      => {
-      rewrite_package => sub {
-        local $_ = $_[0];
-        my $prefix = 'Dist::Zilla::';
-
-          s/^${prefix}PluginBundle::/\@/ or
-          s/^${prefix}Plugin::// or
-          s/^/=/;
-
-        return $_;
-      },
-    },
+    # bundle_method and ini_opts should be determined automatically
   ]);
 
   local *pkg  = sub { 'Dist::Zilla::' . $_[0] };
