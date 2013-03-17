@@ -91,6 +91,18 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 SYNOPSIS
 
+  # exact same usage as Config::MVP::BundleInspector
+
 =head1 DESCRIPTION
+
+This is used internally by L<Dist::Zilla::Plugin::BundleInspector>.
+It extends L<Config::MVP::BundleInspector> to add specialized handling
+for L<Dist::Zilla> and L<Pod::Weaver> bundles.
+
+=head1 SEE ALSO
+
+=for :list
+* L<Config::MVP::BundleInspector>
+* L<Dist::Zilla::Plugin::BundleInspector>
 
 =cut

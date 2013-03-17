@@ -40,6 +40,16 @@ around BUILDARGS => sub {
   return $args;
 };
 
+=attr bundle
+
+Specify the name of a bundle to inspect.
+Can be used multiple times.
+
+If none are specified the plugin will attempt to discover
+any included bundles.
+
+=cut
+
 has bundles => (
   is         => 'lazy',
   isa        => 'ArrayRef',
@@ -112,6 +122,36 @@ __PACKAGE__->meta->make_immutable;
 
 =head1 SYNOPSIS
 
+  ; in dist.ini
+  [Bootstrap::lib]
+  [BundleInspector]
+
 =head1 DESCRIPTION
+
+This plugin is useful when using L<Dist::Zilla> to release
+a plugin bundle for L<Dist::Zilla> or L<Pod::Weaver>
+(others could be supported in the future).
+
+Each bundle inspected will be loaded to gather the plugin specs.
+B<Note> that this means you will probably want to use
+L<Dist::Zilla::Plugin::Bootstrap::lib>
+in order to inspect the included bundle
+(rather than an older, installed version).
+
+This plugin does L<Dist::Zilla::Role::PrereqSource>
+and the bundle's plugin specs will be used
+to determine additional prereqs for the dist.
+
+Additionally this plugin does L<Dist::Zilla::Role::FileMunger>
+so that if you include a line in the pod of your plugin bundle
+of exactly C<=bundle_ini_string> it will be replaced with
+a verbatim block of the roughly equivalent INI config for the bundle.
+
+=head1 SEE ALSO
+
+=for :list
+* L<Config::MVP::Writer::INI>
+* L<Config::MVP::BundleInspector>
+* L<Dist::Zilla::Config::BundleInspector>
 
 =cut
