@@ -6,6 +6,7 @@ use TestBundleHelpers;
 use Test::DZil;
 
 my $root = dir(qw( t data recovering_the_satellites ));
+eval "use lib '${\ $root->subdir(q[lib])->as_foreign(q[Unix])->absolute->stringify }'";
 
 {
   my $tzil = Builder->from_config(
