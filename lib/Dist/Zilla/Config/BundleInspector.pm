@@ -4,6 +4,7 @@ use warnings;
 package Dist::Zilla::Config::BundleInspector;
 # ABSTRACT: Give Hints to Config::MVP::BundleInspector
 
+use Class::Load ();
 use Sub::Override ();
 
 use Moose;
@@ -11,6 +12,7 @@ extends 'Config::MVP::BundleInspector';
 
 around _build_bundle_method => sub {
   my ($orig, $self) = @_;
+  Class::Load::load_class($self->bundle_class);
   return $self->bundle_class->can('bundle_config')
     ? 'bundle_config'
     : $self->$orig();
@@ -20,7 +22,7 @@ sub _build_bundle_name {
   my ($self) = @_;
   (my $name = $self->bundle_class) =~ s/.+::PluginBundle::/\@/;
   return $name;
-};
+}
 
 around _plugin_specs_from_bundle_method => sub {
   my ($orig, $self, $class, $method) = @_;
