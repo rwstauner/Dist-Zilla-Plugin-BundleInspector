@@ -36,6 +36,7 @@ package
 sub pkg { 'Dist::Zilla::' . $_[0] }
 
 our $Easy = 0;
+sub does_easy { $Easy = $_[1] }
 sub DOES { $Easy }
 
 sub add_bundle {

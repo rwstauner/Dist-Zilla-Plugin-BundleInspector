@@ -69,6 +69,8 @@ only_needs = a
 INI
 };
 
+foreach my $easy ( 0, 1 ){
+
 subtest dzil_bundle => sub {
   my $bundle = 'Dist::Zilla::PluginBundle::SullivanStreet';
   my $bi = new_ok($mod, [
@@ -76,20 +78,30 @@ subtest dzil_bundle => sub {
     # bundle_method and ini_opts should be determined automatically
   ]);
 
+  $bundle->does_easy($easy);
+
   local *pkg  = sub { 'Dist::Zilla::' . $_[0] };
   eq_or_diff $bi->plugin_specs, [
     [Ghost   => pkg('Plugin::Train')],
     [Raining => 'In::Baltimore', { ':version' => 'v1.23.45' }],
     [Murder  => pkg('PluginBundle::Of::One'),  { 'version'  => 'not :version' }],
+$easy ? (
+    ['@EverythingAfter' => pkg('PluginBundle::EverythingAfter'), {}],
+) : (
     [August  => pkg('Plugin::Everything')],
     [After   => pkg('Plugin::Everything')],
+)
   ], 'plugin_specs';
 
   eq_or_diff $bi->prereqs->as_string_hash, {
     pkg('Plugin::Train')         => 0,
     'In::Baltimore'              => 'v1.23.45',
     pkg('PluginBundle::Of::One') => 0,
+$easy ? (
+    pkg('PluginBundle::EverythingAfter')    => 0,
+) : (
     pkg('Plugin::Everything')    => 0,
+)
   }, 'prereqs';
 
   eq_or_diff $bi->ini_string, <<INI, 'ini_string';
@@ -101,9 +113,10 @@ subtest dzil_bundle => sub {
 [\@Of::One / Murder]
 version = not :version
 
-[Everything / August]
-[Everything / After]
+${\ ($easy ? '[@EverythingAfter]' : "[Everything / August]\n[Everything / After]") }
 INI
 };
+
+}
 
 done_testing;
