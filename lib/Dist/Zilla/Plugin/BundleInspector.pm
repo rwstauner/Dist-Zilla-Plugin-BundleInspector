@@ -10,6 +10,7 @@ use MooseX::AttributeShortcuts;
 use Dist::Zilla::Config::BundleInspector;
 
 with qw(
+  Dist::Zilla::Role::FileMunger
   Dist::Zilla::Role::PrereqSource
 );
 
@@ -79,6 +80,31 @@ sub register_prereqs {
     %{ $_->prereqs->as_string_hash }
   )
     for values %{ $self->inspectors };
+}
+
+sub munge_file {
+  my ($self, $file) = @_;
+
+  return
+    # FIXME: build up a list? join('|', map { s{::}{/}g; $_ } @{ $self->bundles })?
+    unless my $class = ($file->name =~ $self->file_name_re)[0];
+
+  $class =~ s{/}{::}g;
+
+  return
+    unless my $inspector = $self->inspectors->{ $class };
+
+  my $content = $file->content;
+  my $ini_string = $inspector->ini_string;
+  chomp $ini_string;
+
+  # prepend spaces to make verbatim paragraph
+  $ini_string =~ s/^(.+)$/  $1/mg;
+
+  $content =~ s/^=bundle_ini_string$/$ini_string/m;
+  $file->content($content);
+
+  return;
 }
 
 __PACKAGE__->meta->make_immutable;

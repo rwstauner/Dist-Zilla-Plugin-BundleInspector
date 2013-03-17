@@ -32,6 +32,76 @@ eval "use lib '${\ $root->subdir(q[lib])->as_foreign(q[Unix])->absolute->stringi
     'Pod::Weaver::Section::Angels'           => '1.23',
     'Pod::Weaver::Section::Another'          => 0,
   }, 'prereqs added';
+
+  test_munged_pod(
+    $tzil,
+    $root,
+    [
+      file(qw( lib Dist Zilla PluginBundle Catapult.pm )),
+      <<'INI',
+=head1 Config
+
+=bundle_ini_string
+
+=cut
+INI
+      <<'INI',
+=head1 Config
+
+  [Angels / @Catapult/Of::The::Silences]
+  :version = 3
+
+  [Daylight / @Catapult/Fading]
+  [ImNotSleeping]
+
+  [@Goodnight]
+  :version = 2.2
+  to       = Elisabeth
+
+=cut
+INI
+    ],
+    [
+      file(qw( lib Pod Weaver PluginBundle ChildrenInBloom.pm )),
+      <<'INI',
+=head1 INI
+
+=bundle_ini_string
+
+=cut
+INI
+      <<'INI',
+=head1 INI
+
+  [-SeenMeLately / HaveYou]
+
+  [Angels / Millers]
+  :version = 1.23
+
+  [Another / HorseDreamersBlues]
+
+=cut
+INI
+    ],
+  );
 }
 
 done_testing;
+
+sub test_munged_pod {
+  my ($tzil, $root, @tests) = @_;
+
+  foreach my $test ( @tests ){
+    my ($file, $orig, $munged) = @$test;
+
+    pod_eq_or_diff
+      disk_file($root, $file)->slurp,
+      $orig,
+      'disk file has pod placeholder';
+
+    pod_eq_or_diff
+      zilla_file($file, $tzil->files)->content,
+      $munged,
+      'zilla file munges in INI string';
+  }
+}

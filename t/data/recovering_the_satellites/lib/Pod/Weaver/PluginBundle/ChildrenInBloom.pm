@@ -20,3 +20,9 @@ sub mvp_bundle_config {
 }
 
 1;
+
+=head1 INI
+
+=bundle_ini_string
+
+=cut

@@ -19,3 +19,9 @@ sub configure {
 
 __PACKAGE__->meta->make_immutable;
 1;
+
+=head1 Config
+
+=bundle_ini_string
+
+=cut
