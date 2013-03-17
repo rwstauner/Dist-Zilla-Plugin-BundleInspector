@@ -63,16 +63,15 @@ sub __pkg_to_app {
   return lc $app;
 }
 
-sub __dist_zilla_rewriter {
-  local $_ = $_[0];
-  my $prefix = 'Dist::Zilla::';
-
-    s/^${prefix}PluginBundle::/\@/ or
-    s/^${prefix}Plugin::// or
-    s/^/=/;
-
-  return $_;
-}
+use String::RewritePrefix
+  rewrite => {
+    -as      => '__dist_zilla_rewriter',
+    prefixes => {
+      'Dist::Zilla::PluginBundle::' => '@',
+      'Dist::Zilla::Plugin::'       => '',
+      ''                            => '=',
+    },
+  };
 
 __PACKAGE__->meta->make_immutable;
 1;

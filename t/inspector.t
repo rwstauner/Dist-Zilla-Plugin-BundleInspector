@@ -71,7 +71,7 @@ INI
 
 foreach my $easy ( 0, 1 ){
 
-subtest dzil_bundle => sub {
+subtest "dzil_bundle (easy: $easy)" => sub {
   my $bundle = 'Dist::Zilla::PluginBundle::SullivanStreet';
   my $bi = new_ok($mod, [
     bundle_class  => $bundle,
