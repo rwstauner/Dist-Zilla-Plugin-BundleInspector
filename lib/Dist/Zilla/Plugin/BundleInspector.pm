@@ -58,13 +58,18 @@ has bundles => (
 
 sub _build_bundles {
   my ($self) = @_;
+
   # TODO: warn if ./lib/ not found in @INC?
-  return [
-    map  { s{/}{::}g; $_ } # /r
+
+  my $found = [
     # combine map/grep into one... it feels weird, but why do the m// more than once?
     map  { $_->name =~ $self->file_name_re ? $1 : () }
       @{ $self->zilla->files }
   ];
+
+  s{/}{::}g for @$found;
+
+  return $found;
 }
 
 has inspectors => (
@@ -119,6 +124,11 @@ sub munge_file {
 
 __PACKAGE__->meta->make_immutable;
 1;
+
+=for Pod::Coverage
+munge_file
+mvp_multivalue_args
+register_prereqs
 
 =head1 SYNOPSIS
 
