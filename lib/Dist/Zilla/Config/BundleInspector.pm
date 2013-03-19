@@ -6,6 +6,7 @@ package Dist::Zilla::Config::BundleInspector;
 
 use Class::Load ();
 use Sub::Override ();
+use Try::Tiny;
 
 use Moose;
 extends 'Config::MVP::BundleInspector';
@@ -27,10 +28,13 @@ sub _build_bundle_name {
 around _plugin_specs_from_bundle_method => sub {
   my ($orig, $self, $class, $method) = @_;
 
-  # override the add_bundle of dzil's PluginBundle::Easy to preserve the bundle spec
-  # rather than expanding it to the plugins
-  my $over = $class->DOES('Dist::Zilla::Role::PluginBundle::Easy') &&
-    Sub::Override->new("${class}::add_bundle" => \&__override_dzil_add_bundle);
+  # Override the add_bundle of dzil's PluginBundle::Easy to preserve the bundle spec
+  # rather than expanding it to the plugins.
+  # Use try {} to ignore perls < v5.10 that don't have UNIVERSAL::DOES().
+  my $over = try {
+    $class->DOES('Dist::Zilla::Role::PluginBundle::Easy') &&
+      Sub::Override->new("${class}::add_bundle" => \&__override_dzil_add_bundle);
+  };
 
   return $self->$orig($class, $method);
 };
