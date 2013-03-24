@@ -2,6 +2,9 @@ Revision history for Dist-Zilla-Plugin-BundleInspector
 
 {{$NEXT}}
 
+  - Use namespace::autoclean
+  - Use type coercion instead of BUILDARGS
+
 0.002     2013-03-21T04:36:12Z
 
   - Fix usage for older Path::Class and perls < v5.10
