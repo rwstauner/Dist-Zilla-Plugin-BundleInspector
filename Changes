@@ -4,6 +4,8 @@ Revision history for Dist-Zilla-Plugin-BundleInspector
 
   - Use namespace::autoclean
   - Use type coercion instead of BUILDARGS
+  - Require Config::MVP::Writer::INI 0.003 for strip_bundle_prefix
+    to fix test failures.
 
 0.002     2013-03-21T04:36:12Z
 
