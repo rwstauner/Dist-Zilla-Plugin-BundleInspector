@@ -1,0 +1,97 @@
+# NAME
+
+Dist::Zilla::Plugin::BundleInspector - Gather prereq and config info from PluginBundles
+
+# VERSION
+
+version 0.004
+
+# SYNOPSIS
+
+    ; in dist.ini
+    [Bootstrap::lib]
+    [BundleInspector]
+
+# DESCRIPTION
+
+This plugin is useful when using [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) to release
+a plugin bundle for [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) or [Pod::Weaver](https://metacpan.org/pod/Pod::Weaver)
+(others could be supported in the future).
+
+Each bundle inspected will be loaded to gather the plugin specs.
+**Note** that this means you will probably want to use
+[Dist::Zilla::Plugin::Bootstrap::lib](https://metacpan.org/pod/Dist::Zilla::Plugin::Bootstrap::lib)
+in order to inspect the included bundle
+(rather than an older, installed version).
+
+This plugin does [Dist::Zilla::Role::PrereqSource](https://metacpan.org/pod/Dist::Zilla::Role::PrereqSource)
+and the bundle's plugin specs will be used
+to determine additional prereqs for the dist.
+
+Additionally this plugin does [Dist::Zilla::Role::FileMunger](https://metacpan.org/pod/Dist::Zilla::Role::FileMunger)
+so that if you include a line in the pod of your plugin bundle
+of exactly `=bundle_ini_string` it will be replaced with
+a verbatim block of the roughly equivalent INI config for the bundle.
+
+# ATTRIBUTES
+
+## bundle
+
+Specify the name of a bundle to inspect.
+Can be used multiple times.
+
+If none are specified the plugin will attempt to discover
+any included bundles.
+
+# SEE ALSO
+
+- [Config::MVP::Writer::INI](https://metacpan.org/pod/Config::MVP::Writer::INI)
+- [Config::MVP::BundleInspector](https://metacpan.org/pod/Config::MVP::BundleInspector)
+- [Dist::Zilla::Config::BundleInspector](https://metacpan.org/pod/Dist::Zilla::Config::BundleInspector)
+- [Dist::Zilla::Role::BundleDeps](https://metacpan.org/pod/Dist::Zilla::Role::BundleDeps)
+
+# SUPPORT
+
+## Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Dist::Zilla::Plugin::BundleInspector
+
+## Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+- MetaCPAN
+
+    A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+    [http://metacpan.org/release/Dist-Zilla-Plugin-BundleInspector](http://metacpan.org/release/Dist-Zilla-Plugin-BundleInspector)
+
+## Bugs / Feature Requests
+
+Please report any bugs or feature requests by email to `bug-dist-zilla-plugin-bundleinspector at rt.cpan.org`, or through
+the web interface at [https://rt.cpan.org/Public/Bug/Report.html?Queue=Dist-Zilla-Plugin-BundleInspector](https://rt.cpan.org/Public/Bug/Report.html?Queue=Dist-Zilla-Plugin-BundleInspector). You will be automatically notified of any
+progress on the request by the system.
+
+## Source Code
+
+[https://github.com/rwstauner/Dist-Zilla-Plugin-BundleInspector](https://github.com/rwstauner/Dist-Zilla-Plugin-BundleInspector)
+
+    git clone https://github.com/rwstauner/Dist-Zilla-Plugin-BundleInspector.git
+
+# AUTHOR
+
+Randy Stauner <rwstauner@cpan.org>
+
+# CONTRIBUTOR
+
+Olivier Mengué <dolmen@cpan.org>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Randy Stauner.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
