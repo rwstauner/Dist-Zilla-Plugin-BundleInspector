@@ -154,5 +154,6 @@ a verbatim block of the roughly equivalent INI config for the bundle.
 * L<Config::MVP::Writer::INI>
 * L<Config::MVP::BundleInspector>
 * L<Dist::Zilla::Config::BundleInspector>
+* L<Dist::Zilla::Role::BundleDeps>
 
 =cut
